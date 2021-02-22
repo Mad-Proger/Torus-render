@@ -49,7 +49,7 @@ int main() {
 		}
 
 		wnd.clear();
-		torus.render1(lightSource, viewPosition, fovAngle, (unsigned char *)pixelArray, width, height);
+		torus.render(lightSource, viewPosition, fovAngle, (unsigned char *)pixelArray, width, height);
 		torusTexture.update(pixelArray);
 		wnd.draw(torusSprite);
 		wnd.display();
