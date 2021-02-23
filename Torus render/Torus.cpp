@@ -48,59 +48,6 @@ void Torus::render(const Vector3 &lightSrc, const Vector3 &viewPosition, long do
 	}
 }
 
-void Torus::render1(const Vector3 &lightSrc, const Vector3 &viewPosition, long double fov, unsigned char *pixelArray, unsigned int width, unsigned int height) const {
-	Vector3 vertical(0, -1, 0);
-	Vector3 xDirection = center - viewPosition;
-	xDirection.normalize();
-	Vector3 zDirection = xDirection % vertical;
-	zDirection.normalize();
-	Vector3 yDirection = xDirection % zDirection;
-	yDirection.normalize();
-
-	long double hfov = fov * ((long double)height / width);
-	Vector3 cornerDirection(1.L, 0.L, 0.L);
-	cornerDirection.transform(Vector3::rotationMatrixY(-fov / 2.L));
-	cornerDirection.transform(Vector3::rotationMatrixZ(hfov / 2.L));
-
-	for (unsigned int x = 0; x < width; ++x) {
-		for (unsigned int y = 0; y < height; ++y) {
-			Vector3 pixelDirection = cornerDirection;
-			pixelDirection.transform(Vector3::rotationMatrixY(fov * x / (long double)width));
-			pixelDirection.transform(Vector3::rotationMatrixZ(-hfov * y / (long double)height));
-
-			Vector3 pixelVector = pixelDirection.toNewBasis(xDirection, yDirection, zDirection);
-			long double pixelBrightness = getBrightness1(viewPosition, pixelVector, lightSrc);
-			unsigned char pixelColorValue = unsigned char(std::min(255.L, std::max(0.L, pixelBrightness * 255.L)));
-
-			unsigned int pixelIndex = y * width + x;
-			pixelArray[4 * pixelIndex + 0] = pixelColorValue;
-			pixelArray[4 * pixelIndex + 1] = pixelColorValue;
-			pixelArray[4 * pixelIndex + 2] = pixelColorValue;
-			pixelArray[4 * pixelIndex + 3] = 255;
-		}
-	}
-}
-
-long double Torus::getBrightness(Vector3 pos, Vector3 direction, Vector3 lightPos) const {
-	direction /= direction.abs();
-	for (int i = 0; i < ITERATIONS; ++i) {
-		long double currentDistance = getDistance(pos);
-		if (currentDistance > INF)
-			return 0.L;
-		pos += direction * getDistance(pos);
-	}
-	if (abs(getDistance(pos)) > EPS)
-		return 0.L;
-
-	Vector3 rayDirection = pos - lightPos;
-	rayDirection.normalize();
-	for (int i = 0; i < ITERATIONS; ++i)
-		lightPos += rayDirection * getDistance(lightPos);
-	if ((lightPos - pos).abs() > 10.L * EPS)
-		return 0.L;
-	return -rayDirection * normalVector(pos);
-}
-
 Vector3 Torus::intersectCenteredTorus(const Vector3 &position, const Vector3 &direction) const {
 	long double a = direction.abs2();
 	long double b = 2.L * position * direction;
@@ -110,14 +57,14 @@ Vector3 Torus::intersectCenteredTorus(const Vector3 &position, const Vector3 &di
 	long double z0 = position * centeredNormalVector;
 	long double z1 = direction * centeredNormalVector;
 	long double d = a - z1 * z1;
-	long double e = b - z0 * z1;
-	long double f = c - z0 * z0;
+	long double e = b - 2.L * z0 * z1;
+	long double f = position.abs2() - z0 * z0;
 
 	std::vector<Complex> equationRoots = Equations::solveQuartic(a * a, 2.L * a * b, 2.L * a * c + b * b - 4.L * radius * radius * d, 2.L * b * c - 4.L * radius * radius * e, c * c - 4.L * radius * radius * f);
 	bool foundIntersection = false;
 	long double intersectionParameter = 0.L;
 	for (const Complex &root : equationRoots) {
-		if (abs(root.imag()) > EPS)
+		if (abs(root.imag()) > EPS * EPS * EPS)
 			continue;
 		if (root.real() < 0)
 			continue;
@@ -153,7 +100,7 @@ Vector3 Torus::intersectTorus(const Vector3 &position, const Vector3 &direction)
 	return intersectionPoint;
 }
 
-long double Torus::getBrightness1(const Vector3 &pos, const Vector3 &direction, const Vector3 &lightPos) const {
+long double Torus::getBrightness(const Vector3 &pos, const Vector3 &direction, const Vector3 &lightPos) const {
 	Vector3 viewTorusIntersection = intersectTorus(pos, direction);
 	if ((viewTorusIntersection - center).abs() < EPS)
 		return 0.L;
@@ -177,15 +124,6 @@ void Torus::rotateY(long double angle) {
 
 void Torus::rotateZ(long double angle) {
 	normal.transform(Vector3::rotationMatrixZ(angle));
-}
-
-long double Torus::getDistance(const Vector3 &p) const {
-	Vector3 op = p - center;
-	long double d = op * normal;
-	Vector3 op1 = op - normal * d;
-	Vector3 ox = op1 * (radius / op1.abs());
-	Vector3 xp = p - (center + ox);
-	return xp.abs() - distance;
 }
 
 Vector3 Torus::normalVector(const Vector3 &p) const {

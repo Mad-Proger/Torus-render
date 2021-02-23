@@ -338,3 +338,10 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Torus render.sln
+/Torus render/TorusFrame.jpg
+/Torus render/Torus render.zip
+/Torus render/Torus render.vcxproj.filters
+/Torus render/Torus render.vcxproj
+/Torus render/Torus render.exe
+/Torus render/test.cpp

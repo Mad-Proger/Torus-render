@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace Equations {
-	const long double EPS = 1e-6;
+	const long double EPS = 1e-8;
 	std::vector<Complex> solveQuadratic(const Complex &a, const Complex &b, const Complex &c);
 
 	std::vector<Complex> solveCubic(const Complex &a, const Complex &b, const Complex &c, const Complex &d);
