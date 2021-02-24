@@ -79,33 +79,33 @@ Vector3 Vector3::toNewBasis(const Vector3 &vx, const Vector3 &vy, const Vector3 
 std::array<Vector3, 3> Vector3::rotationMatrixX(const long double &angle) {
 	std::array<Vector3, 3> matrix;
 	matrix[0] = Vector3(1.L, 0.L, 0.L);
-	matrix[1] = Vector3(0.L, cosl(angle), -sinl(angle));
-	matrix[2] = Vector3(0.L, sinl(angle), cosl(angle));
+	matrix[1] = Vector3(0.L, std::cos(angle), -std::sin(angle));
+	matrix[2] = Vector3(0.L, std::sin(angle), std::cos(angle));
 	return matrix;
 }
 
 std::array<Vector3, 3> Vector3::rotationMatrixY(const long double &angle) {
 	std::array<Vector3, 3> matrix;
-	matrix[0] = Vector3(cosl(angle), 0.L, sinl(angle));
+	matrix[0] = Vector3(std::cos(angle), 0.L, std::sin(angle));
 	matrix[1] = Vector3(0.L, 1.L, 0.L);
-	matrix[2] = Vector3(-sinl(angle), 0.L, cosl(angle));
+	matrix[2] = Vector3(-std::sin(angle), 0.L, std::cos(angle));
 	return matrix;
 }
 
 std::array<Vector3, 3> Vector3::rotationMatrixZ(const long double &angle) {
 	std::array<Vector3, 3> matrix;
-	matrix[0] = Vector3(cosl(angle), -sinl(angle), 0.L);
-	matrix[1] = Vector3(sinl(angle), cosl(angle), 0.L);
+	matrix[0] = Vector3(std::cos(angle), -std::sin(angle), 0.L);
+	matrix[1] = Vector3(std::sin(angle), std::cos(angle), 0.L);
 	matrix[2] = Vector3(0.L, 0.L, 1.L);
 	return matrix;
 }
 
 std::array<Vector3, 3> Vector3::rotationMatrix(const Vector3 &a, const Vector3 &b) {
-	const long double angle = atan2l((a % b).abs(), a * b);
+	const long double angle = std::atan2((a % b).abs(), a * b);
 	Vector3 c = a % b;
 	c.normalize();
-	long double cosValue = cosl(angle);
-	long double sinValue = sinl(angle);
+	long double cosValue = std::cos(angle);
+	long double sinValue = std::sin(angle);
 
 	std::array<Vector3, 3> matrix;
 	matrix[0] = Vector3(

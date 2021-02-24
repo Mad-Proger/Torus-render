@@ -3,20 +3,20 @@
 
 Torus::Torus() {
 	this->center = Vector3();
-	this->normal = Vector3(0, 1, 0);
+	this->normal = Vector3(0.L, 1.L, 0.L);
 	this->radius = 0.L;
 	this->distance = 0.L;
 }
 
 Torus::Torus(Vector3 center, long double radius, long double distance) {
 	this->center = center;
-	this->normal = Vector3(0, 1, 0);
+	this->normal = Vector3(0.L, 1.L, 0.L);
 	this->radius = radius;
 	this->distance = distance;
 }
 
 void Torus::render(const Vector3 &lightSrc, const Vector3 &viewPosition, long double fov, unsigned char *pixelArray, unsigned int width, unsigned int height) const {
-	Vector3 vertical(0, -1, 0);
+	Vector3 vertical(0.L, -1.L, 0.L);
 	Vector3 xDirection = center - viewPosition;
 	xDirection.normalize();
 	Vector3 zDirection = xDirection % vertical;
@@ -64,7 +64,7 @@ Vector3 Torus::intersectCenteredTorus(const Vector3 &position, const Vector3 &di
 	bool foundIntersection = false;
 	long double intersectionParameter = 0.L;
 	for (const Complex &root : equationRoots) {
-		if (abs(root.imag()) > EPS * EPS * EPS)
+		if (std::abs(root.imag()) > EPS * EPS * EPS)
 			continue;
 		if (root.real() < 0)
 			continue;

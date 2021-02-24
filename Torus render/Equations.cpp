@@ -39,7 +39,7 @@ std::vector<Complex> Equations::solveQuartic(const Complex &a, const Complex &b,
 		t = Complex::cbrt(Complex::sqrt(delta1 * delta1));
 	Complex s = Complex::sqrt(-(2.L * p) / 3.L + (t + delta0 / t) / (3.L * a)) / 2.L;
 	while (s.abs() < EPS) {
-		t *= Complex(cosl(2.L * M_PI / 3.L), sinl(2.L * M_PI / 3.L));
+		t *= Complex(std::cos(2.L * M_PI / 3.L), std::sin(2.L * M_PI / 3.L));
 		s = Complex::sqrt(-(2.L * p) / 3.L + (t + delta0 / t) / (3.L * a)) / 2.L;
 	}
 

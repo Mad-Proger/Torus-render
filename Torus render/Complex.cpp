@@ -112,11 +112,11 @@ const long double &Complex::imag() const {
 }
 
 long double Complex::arg() const {
-	return atan2l(im, re);
+	return std::atan2(im, re);
 }
 
 long double Complex::abs() const {
-	return hypotl(re, im);
+	return std::hypot(re, im);
 }
 
 long double Complex::abs2() const {
@@ -129,12 +129,12 @@ Complex Complex::conj() const {
 
 Complex Complex::sqrt(const Complex &x) {
 	long double argNew = x.arg() / 2.L;
-	return sqrtl(x.abs()) * Complex(cosl(argNew), sinl(argNew));
+	return std::sqrt(x.abs()) * Complex(std::cos(argNew), std::sin(argNew));
 }
 
 Complex Complex::cbrt(const Complex &x) {
 	long double argNew = x.arg() / 3.L;
-	return cbrtl(x.abs()) * Complex(cosl(argNew), sinl(argNew));
+	return std::cbrt(x.abs()) * Complex(std::cos(argNew), std::sin(argNew));
 }
 
 Complex Complex::unit() {
