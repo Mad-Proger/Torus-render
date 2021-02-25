@@ -15,7 +15,7 @@ Torus::Torus(Vector3 center, long double radius, long double distance) {
 	this->distance = distance;
 }
 
-void Torus::render(const Vector3 &lightSrc, const Vector3 &viewPosition, long double fov, unsigned char *pixelArray, unsigned int width, unsigned int height) const {
+void Torus::render(const Vector3 &lightSrc, const Vector3 &viewPosition, long double fov, unsigned char *pixelArray, unsigned int width, unsigned int height, unsigned int left, unsigned int top, unsigned int right, unsigned int bottom) const {
 	Vector3 vertical(0.L, -1.L, 0.L);
 	Vector3 xDirection = center - viewPosition;
 	xDirection.normalize();
@@ -29,8 +29,8 @@ void Torus::render(const Vector3 &lightSrc, const Vector3 &viewPosition, long do
 	cornerDirection.transform(Vector3::rotationMatrixY(-fov / 2.L));
 	cornerDirection.transform(Vector3::rotationMatrixZ(hfov / 2.L));
 
-	for (unsigned int x = 0; x < width; ++x) {
-		for (unsigned int y = 0; y < height; ++y) {
+	for (unsigned int x = left; x < right; ++x) {
+		for (unsigned int y = top; y < bottom; ++y) {
 			Vector3 pixelDirection = cornerDirection;
 			pixelDirection.transform(Vector3::rotationMatrixY(fov * x / (long double)width));
 			pixelDirection.transform(Vector3::rotationMatrixZ(-hfov * y / (long double)height));

@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Vector3.h"
 #include "Equations.h"
+#include "SDL.h"
 
 class Torus {
 private:
@@ -20,7 +21,7 @@ public:
 	Torus();
 	Torus(Vector3 center, long double radius, long double distance);
 
-	void render(const Vector3 &lightSrc, const Vector3 &viewPosition, long double fov, unsigned char *pixelArray, unsigned int width, unsigned int height) const;
+	void render(const Vector3 &lightSrc, const Vector3 &viewPosition, long double fov, unsigned char *pixelArray, unsigned int width, unsigned int height, unsigned int left, unsigned int top, unsigned int right, unsigned int bottom) const;
 
 	void rotateX(long double angle);
 	void rotateY(long double angle);
